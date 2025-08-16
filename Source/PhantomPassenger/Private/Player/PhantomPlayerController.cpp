@@ -4,6 +4,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "UI/HUD/PhantomHUD.h"
+#include "Characters/PassangerCharacter.h"
 #include "Blueprint/UserWidget.h"
 
 APhantomPlayerController::APhantomPlayerController()
@@ -30,16 +31,6 @@ void APhantomPlayerController::BeginPlay()
     InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
     InputModeData.SetHideCursorDuringCapture(false);
     SetInputMode(InputModeData);
-
-    if (PhantomHUDWidgetClass)
-    {
-        UPhantomHUD* HUDWidget = CreateWidget<UPhantomHUD>(this, PhantomHUDWidgetClass);
-        if (HUDWidget)
-        {
-            HUDWidget->AddToViewport();
-            HUDWidget->InitializeHUD();
-        }
-    }
 }
 
 void APhantomPlayerController::SetupInputComponent()
@@ -57,7 +48,43 @@ void APhantomPlayerController::SetupInputComponent()
 
 void APhantomPlayerController::OnInteract(const FInputActionValue& Value)
 {
-    // Handle interaction logic here
+    FVector2D MousePosition;
+    if (GetMousePosition(MousePosition.X, MousePosition.Y))
+    {
+        FHitResult HitResult;
+        // Perform a line trace from the mouse position into the world
+        if (GetHitResultAtScreenPosition(MousePosition, ECC_Visibility, false, HitResult))
+        {
+            if (AActor* HitActor = HitResult.GetActor())
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Line trace hit actor: %s"), *HitActor->GetName());
+
+                // Check if the hit actor is a passenger
+                APassangerCharacter* Passenger = Cast<APassangerCharacter>(HitActor);
+                if (Passenger)
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Passenger clicked: %s"), *Passenger->GetName());
+                    Passenger->PassengerClickedEvent(); // Pass index if you have it, or -1
+                }
+                else
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Clicked actor is not a passenger: %s"), *HitActor->GetName());
+                }
+            }
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("Line trace did not hit any actor."));
+            }
+        }
+        else
+        {
+            UE_LOG(LogTemp, Warning, TEXT("No actor hit by line trace."));
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Could not get mouse position."));
+    }
 }
 
 void APhantomPlayerController::OnOpenNotebook(const FInputActionValue& Value)

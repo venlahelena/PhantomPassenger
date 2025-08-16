@@ -4,6 +4,8 @@
 #include "Bus/BusManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "Characters/PassangerCharacter.h"
+#include "UI/HUD/PhantomHUD.h"
+#include "Game/PhantomGameMode.h"
 #include "Engine/World.h"
 
 ABusManager::ABusManager()
@@ -60,6 +62,7 @@ void ABusManager::SpawnPassengers()
 
         if (NewPassenger)
         {
+			NewPassenger->BusManagerRef = this;
             bool bAssignPhantom = (i == PhantomIndex);
             NewPassenger->RandomizePassenger(
                 bAssignPhantom,
@@ -105,10 +108,18 @@ void ABusManager::TriggerDeduction()
     // Evaluate clues and player selection
     // Trigger success/fail ending (stub)
 }
-
+ 
 void ABusManager::OnPassengerClicked(int32 PassengerIndex)
 {
-    // Open interaction menu for the selected passenger (stub)
+    APhantomGameMode* PhantomGameMode = Cast<APhantomGameMode>(UGameplayStatics::GetGameMode(GetWorld()));
+    if (PhantomGameMode)
+    {
+        UPhantomHUD* PhantomHUDInstance = PhantomGameMode->GetPhantomHUD();
+        if (PhantomHUDInstance)
+        {
+            PhantomHUDInstance->ShowInteractionMenu();
+        }
+    }
 }
 
 void ABusManager::InspectTicket(int32 PassengerIndex)

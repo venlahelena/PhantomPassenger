@@ -31,6 +31,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "UI")
 	void HideDialogue();
 
+	UFUNCTION(BlueprintCallable)
+	void HideInteractionMenu();
+
 protected:
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
@@ -44,4 +47,10 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<UUserWidget> DialogueWidgetClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> InteractionMenuWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UUserWidget* InteractionMenuWidget;
 };

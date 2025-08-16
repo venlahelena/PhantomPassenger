@@ -4,6 +4,8 @@
 #include "CoreMinimal.h"
 #include "PassangerCharacter.generated.h"
 
+class ABusManager;
+
 UENUM(BlueprintType)    
 enum class EPassengerArchetype : uint8
 {
@@ -46,8 +48,14 @@ public:
     UFUNCTION(BlueprintCallable)
     void RandomizePassenger(bool bAssignPhantom, int32 CurrentStop, const FString& Date, const FString& RouteNumber);
 
+    UFUNCTION(BlueprintImplementableEvent)
+    void PassengerClickedEvent();
+
 protected:
     virtual void BeginPlay() override;
 public:
     virtual void Tick(float DeltaTime) override;
+
+    UPROPERTY()
+    ABusManager* BusManagerRef;
 };

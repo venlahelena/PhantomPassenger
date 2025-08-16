@@ -36,7 +36,4 @@ protected:
 
     void OnInteract(const FInputActionValue& Value);
     void OnOpenNotebook(const FInputActionValue& Value);
-
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-    TSubclassOf<UPhantomHUD> PhantomHUDWidgetClass;
 };

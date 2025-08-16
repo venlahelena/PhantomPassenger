@@ -39,7 +39,7 @@ void UPhantomHUD::ShowDialogue(const FString& Speaker, const FString& Text, cons
     }
     if (DialogueWidget)
     {
-        DialogueWidget->SetVisibility(ESlateVisibility::Visible);
+        DialogueWidget->SetVisibility(ESlateVisibility::Hidden);
 
         // Example: If your widget has exposed functions, call them here.
         // auto* Widget = Cast<UPhantomDialogueWidget>(DialogueWidget);
@@ -55,6 +55,14 @@ void UPhantomHUD::HideDialogue()
     if (DialogueWidget)
     {
         DialogueWidget->SetVisibility(ESlateVisibility::Hidden);
+    }
+}
+
+void UPhantomHUD::HideInteractionMenu()
+{
+    if (InteractionMenuWidget)
+    {
+        InteractionMenuWidget->SetVisibility(ESlateVisibility::Hidden);
     }
 }
 

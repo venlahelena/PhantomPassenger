@@ -1,4 +1,5 @@
 #include "Characters/PassangerCharacter.h"
+#include "Bus/BusManager.h"
 #include "Math/UnrealMathUtility.h"
 
 // Sets default values
@@ -7,6 +8,9 @@ APassangerCharacter::APassangerCharacter()
     PrimaryActorTick.bCanEverTick = false;
     bIsPhantom = false;
     Archetype = EPassengerArchetype::Nervous;
+
+    GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+    GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);
 }
 
 // Called when the game starts or when spawned
